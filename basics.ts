@@ -28,82 +28,79 @@ enum bool {
 namespace basics {
 
     //% group="typical"
-    //% blockID=add_gravity_ex
     //% block="add gravity to $sprite=variables_get(mysprite)"
-    export function gravity(sprite: Sprite) {
+    export function add_gravity_to(sprite: Sprite) {
         sprite.ay = 500
     }
 
     //% group="typical"
-    //% blockID=jump_ex
-    //% block="make $sprite=variables_get(mysprite) jump||, height $x pixels"
+    //% block="make $sprite=variables_get(mysprite) jump||, height $pixels pixels"
     //% x.defl=250
-    export function jump(sprite: Sprite, x?: number) {
-        sprite.vy = -x
+    export function make_sprite_jump(sprite: Sprite, pixels?: number) {
+        sprite.vy = -pixels
     }
 
     //% group="movement"
-    //% block="set $sprite=variables_get(mysprite) $booln move"
-    export function moveable(sprite: Sprite, booln: bool) {
-        if (booln == 0) {
+    //% block="set $sprite=variables_get(mysprite) $option move"
+    export function set_sprite_moveable(sprite: Sprite, option: bool) {
+        if (option == 0) {
             controller.moveSprite(sprite)
         }
-        if (booln == 1) {
+        if (option == 1) {
             controller.moveSprite(sprite, 0, 0)
         }
     }
 
     //% group="movement"
-    //% blockID=walk_ms_ex
-    //% block="make $sprite=variables_get(mysprite) walk $dir at speed $amp for $ms ms"
+    //% block="make $sprite=variables_get(mysprite) walk $direction at speed $speed for $ms ms"
     //% ms.shadow=timePicker
-    export function righttime(sprite: Sprite, ms: number, amp: number, dir: direction,) {
-        if (dir == 0) {
-            sprite.vx = amp - amp * 2
+    export function sprite_move_direction(sprite: Sprite, ms: number, speed: number, direction: direction,) {
+        if (direction == 0) {
+            sprite.vx = -speed
             timer.after(ms, function () {
                 sprite.vx = 0
             })
         }
-        if (dir == 1) {
-            sprite.vx = amp
+        if (direction == 1) {
+            sprite.vx = speed
             timer.after(ms, function () {
                 sprite.vx = 0
             })
         }
-        if (dir == 2) {
-            sprite.vy = amp - amp * 2
+        if (direction == 2) {
+            sprite.vy = -speed
             timer.after(ms, function () {
                 sprite.vy = 0
             })
 
         }
-        if (dir == 3) {
-            sprite.vy = amp
-            timer.after(ms, function () {
+        if (direction == 3) {
+            sprite.vy = speed
+            timer.after(ms, function() {
                 sprite.vy = 0
             })
         }
     }
 
     //% group="movement"
-    //% block="set $sprite=variables_get(mysprite) movement $lrorud at speed $x"
-    export function updownleftright(sprite: Sprite, lrorud: dir, x: number) {
-        if (lrorud == 0) {
-            controller.moveSprite(sprite, x, 0)
+    //% block="set $sprite=variables_get(mysprite) movement $direction at speed $speed"
+    export function sprite_move(sprite: Sprite, direction: dir, speed: number) {
+        if (direction == 0) {
+            controller.moveSprite(sprite, speed, 0)
         }
-        if (lrorud == 1) {
-            controller.moveSprite(sprite, 0, x)
+        if (direction == 1) {
+            controller.moveSprite(sprite, 0, speed)
         }
     }
 
     //% group="tiles"
-    //% block="set $sprite=variables_get(mysprite) $ca go through walls"
-    export function canwall(sprite: Sprite, ca: bool) {
-        if (ca == 0) {
+    //% block="set $sprite=variables_get(mysprite) $option go through walls"
+    export function sprite_move_through_wall(sprite: Sprite, option: bool) {
+        if (option == 0) {
             sprite.setFlag(SpriteFlag.GhostThroughWalls, true)
             sprite.data["movethruwall"] = true
         }
-        if (ca == 1) {
+        if (option == 1) {
             sprite.setFlag(SpriteFlag.GhostThroughWalls, false)
             sprite.data["movethruwall"] = false
         }
@@ -111,8 +108,7 @@ namespace basics {
 
     //% group="tiles"
     //% block="$sprite=variables_get(mysprite) can go through walls?"
-    //% blockID="can_move_through_walls_ex"
-    export function canwallboo(sprite: Sprite): boolean {
+    export function can_sprite_move_through_wall(sprite: Sprite): boolean {
         if (sprite.data["movethruwall"] == true) {
             return true
         }
