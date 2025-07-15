@@ -1,5 +1,5 @@
 enum Way {
-    //% block="horizontally and vertically"
+    //% block="circularly"
     Both,
     //% block="horizontally"
     Horizontally,
@@ -153,5 +153,79 @@ namespace basics {
                 return false
             }
         }
+    }
+
+    //% group="proximity"
+    //% block="show area of sight from $sprite=variables_get(mysprite) is circular $isCircle radius $radius color $color in direction $direction"
+    //% radius.defl=60
+    //% color.shadow=colorindexpicker
+    export function show_sight(sprite: Sprite, isCircle: boolean, radius: number, color: number, direction: Direction){
+        let renderable: scene.Renderable
+        renderable = scene.createRenderable(sprite.z - 0.01, (target, camera) => {
+            if(sprite.flags & sprites.Flag.Destroyed) {
+                renderable.destroy();
+                return;
+            }
+            
+            if(sprite.flags & SpriteFlag.Invisible) {
+                return;
+            }
+
+            renderable.z = sprite.z - 0.01
+            
+            let offsetX = 0;
+            let offsetY = 0;
+
+            if(!(sprite.flags & SpriteFlag.RelativeToCamera)) {
+                offsetX = camera.drawOffsetX;
+                offsetY = camera.drawOffsetY;
+            }
+
+            if(isCircle) {
+                target.fillCircle(
+                    sprite.x - offsetX,
+                    sprite.y - offsetY,
+                    radius,
+                    color
+            )}
+            else {
+                if (direction == 0) {
+                    target.fillRect(
+                        sprite.x - radius - offsetX,
+                        sprite.y - offsetY,
+                        radius,
+                        1,
+                        color
+                    );
+                }
+                else if (direction == 1) {
+                    target.fillRect(
+                        sprite.x - offsetX,
+                        sprite.y - offsetY,
+                        radius,
+                        1,
+                        color
+                    );
+                }
+                else if (direction == 2) {
+                    target.fillRect(
+                        sprite.x - offsetX,
+                        sprite.y - radius - offsetY,
+                        1,
+                        radius,
+                        color
+                    );
+                }
+                else if (direction == 3) {
+                    target.fillRect(
+                        sprite.x - offsetX,
+                        sprite.y - offsetY,
+                        1,
+                        radius,
+                        color
+                    );
+                }
+            }
+        })      
     }
 }
